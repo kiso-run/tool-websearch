@@ -1,0 +1,9 @@
+# Search backend: "brave" (default) or "serper"
+#
+# Brave Search API — https://brave.com/search/api/
+#   Free: 2000 queries/month. Get a key at https://api.search.brave.com/
+#
+# Serper — https://serper.dev/
+#   Google results. Free: 2500 queries (one-time). Then ~$1/1000 queries.
+#
+backend = "brave"

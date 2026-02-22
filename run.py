@@ -1,10 +1,18 @@
 import json
 import os
+import signal
 import sys
 import tomllib
 from pathlib import Path
 
 import httpx
+
+
+def _handle_sigterm(signum, frame):
+    sys.exit(0)
+
+
+signal.signal(signal.SIGTERM, _handle_sigterm)
 
 
 def main():

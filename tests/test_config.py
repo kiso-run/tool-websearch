@@ -1,4 +1,7 @@
+import tomllib
 from unittest.mock import patch
+
+import pytest
 
 from run import load_config
 
@@ -48,3 +51,19 @@ class TestLoadConfig:
         with patch("run.__file__", str(fake_run)):
             config = load_config()
         assert config["extra_key"] == "value"
+
+
+def test_malformed_config_toml_raises(tmp_path):
+    """Verify tomllib raises on invalid TOML content."""
+    bad = tmp_path / "config.toml"
+    bad.write_text("[broken")
+    with pytest.raises(tomllib.TOMLDecodeError):
+        with open(bad, "rb") as f:
+            tomllib.load(f)
+
+
+def test_load_config_returns_dict():
+    """load_config always returns a dict (empty or populated)."""
+    result = load_config()
+    assert isinstance(result, dict)
+    assert "backend" in result  # default or from file

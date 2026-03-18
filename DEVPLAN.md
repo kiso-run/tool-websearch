@@ -160,8 +160,8 @@ missing `web` key entirely, `web` without `results` key.
 - [x] **M6** — Functional tests (subprocess contract)
 - [x] **M7** — SIGTERM graceful shutdown test
 - [x] **M8** — Brave response edge cases
-- [ ] **M9** — kiso.toml validation test
-- [ ] **M10** — Config error handling
+- [x] **M9** — kiso.toml validation test
+- [x] **M10** — Config error handling
 
 ### M9 — kiso.toml validation test
 
@@ -175,7 +175,7 @@ missing `web` key entirely, `web` without `results` key.
 2. Verify each appears in `run.py`
 3. Verify TOML structure
 
-- [ ] Implement manifest validation test
+- [x] Implement manifest validation test
 
 ---
 
@@ -190,4 +190,4 @@ missing `web` key entirely, `web` without `results` key.
 1. Create malformed config.toml, call `load_config()` — verify it raises or handles gracefully
 2. Config with unknown backend key — verify `main()` catches it
 
-- [ ] Implement config error tests
+- [x] Implement config error tests

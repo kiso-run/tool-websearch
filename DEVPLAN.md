@@ -65,3 +65,98 @@ stdout.
 - [x] `test_formatting.py` — snippet with blank lines
 - [x] Verify all error paths exit 1 with correct stdout/stderr messages
 - [x] Both backends tested for timeout and network errors
+
+### M6 — Functional tests (subprocess contract)
+
+**Problem:** `test_main.py` already has good coverage of error paths via
+subprocess (missing API key, unknown backend, max_results capping), and
+`test_error_handling.py` covers timeout/network errors. However, no test
+exercises a **successful search flow** end-to-end through the subprocess
+protocol with mocked HTTP responses.
+
+**Files:** `tests/test_functional.py` (new)
+
+**Change:**
+
+1. **Happy path — brave search:**
+   - stdin: `{args: {query: "python async", max_results: 3}, ...}`
+   - Mock `httpx.get` to return brave response
+   - Assert: stdout contains numbered results, exit code 0
+
+2. **Happy path — serper search:**
+   - Set config backend to "serper"
+   - Mock `httpx.post` to return serper response
+   - Assert: stdout contains numbered results, exit code 0
+
+3. **Happy path — with language/country:**
+   - Verify params forwarded correctly in mocked call
+
+4. **Empty results — brave:**
+   - Mock returns `{web: {results: []}}`
+   - Assert: stdout contains `No results found`, exit code 0
+
+5. **Empty results — serper:**
+   - Mock returns `{organic: []}`
+   - Assert: stdout contains `No results found`, exit code 0
+
+6. **Malformed input — invalid JSON:**
+   - Send `"not json"` on stdin
+   - Assert: exit code 1
+
+7. **Malformed input — missing query key:**
+   - stdin: `{args: {}}`
+   - Assert: exit code 1 (KeyError on `args["query"]`)
+
+- [ ] Implement functional test file
+- [ ] All 7 tests pass
+- [ ] Total test count verified
+
+---
+
+### M7 — SIGTERM graceful shutdown test
+
+**Problem:** `run.py` registers a SIGTERM handler but no test verifies
+the process exits cleanly on SIGTERM during an HTTP request.
+
+**Files:** `tests/test_functional.py` (add)
+
+**Change:**
+
+1. Start `run.py` as subprocess with mock HTTP that delays 10s
+2. Send SIGTERM after 0.5s
+3. Assert: process exits 0
+
+- [ ] Implement SIGTERM test
+- [ ] Passes on Linux
+
+---
+
+### M8 — Brave response edge cases
+
+**Problem:** Unit tests don't cover all Brave API response shapes:
+missing `web` key entirely, `web` without `results` key.
+
+**Files:** `tests/test_brave.py` (add)
+
+**Change:**
+
+1. `search_brave` with response `{}` (no `web` key) → returns empty list
+2. `search_brave` with response `{web: {}}` (no `results` key) → returns empty list
+3. `search_brave` without language/country → params dict must NOT contain
+   `search_lang` or `country` keys
+
+- [ ] Add 3 edge case tests
+- [ ] All tests pass
+
+---
+
+## Milestone Checklist
+
+- [x] **M1** — Brave search backend
+- [x] **M2** — Serper search backend
+- [x] **M3** — Config + main entry point
+- [x] **M4** — Test suite
+- [x] **M5** — Complete test coverage
+- [ ] **M6** — Functional tests (subprocess contract)
+- [ ] **M7** — SIGTERM graceful shutdown test
+- [ ] **M8** — Brave response edge cases

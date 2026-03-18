@@ -107,9 +107,9 @@ protocol with mocked HTTP responses.
    - stdin: `{args: {}}`
    - Assert: exit code 1 (KeyError on `args["query"]`)
 
-- [ ] Implement functional test file
-- [ ] All 7 tests pass
-- [ ] Total test count verified
+- [x] Implement functional test file
+- [x] All 7 tests pass
+- [x] Total test count verified
 
 ---
 
@@ -126,8 +126,8 @@ the process exits cleanly on SIGTERM during an HTTP request.
 2. Send SIGTERM after 0.5s
 3. Assert: process exits 0
 
-- [ ] Implement SIGTERM test
-- [ ] Passes on Linux
+- [x] Implement SIGTERM test
+- [x] Passes on Linux
 
 ---
 
@@ -145,8 +145,8 @@ missing `web` key entirely, `web` without `results` key.
 3. `search_brave` without language/country → params dict must NOT contain
    `search_lang` or `country` keys
 
-- [ ] Add 3 edge case tests
-- [ ] All tests pass
+- [x] Add 3 edge case tests
+- [x] All tests pass
 
 ---
 
@@ -157,6 +157,6 @@ missing `web` key entirely, `web` without `results` key.
 - [x] **M3** — Config + main entry point
 - [x] **M4** — Test suite
 - [x] **M5** — Complete test coverage
-- [ ] **M6** — Functional tests (subprocess contract)
-- [ ] **M7** — SIGTERM graceful shutdown test
-- [ ] **M8** — Brave response edge cases
+- [x] **M6** — Functional tests (subprocess contract)
+- [x] **M7** — SIGTERM graceful shutdown test
+- [x] **M8** — Brave response edge cases

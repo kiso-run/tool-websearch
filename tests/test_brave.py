@@ -92,3 +92,27 @@ class TestSearchBrave:
         with patch("httpx.get", return_value=make_response({})):
             results = search_brave("query", 5, None, None, "key123")
         assert results == []
+
+    # --- M8: Brave response edge cases ---
+
+    def test_web_without_results_key_returns_empty(self):
+        """Response has 'web' key but no 'results' inside it."""
+        with patch("httpx.get", return_value=make_response({"web": {}})):
+            results = search_brave("query", 5, None, None, "key123")
+        assert results == []
+
+    def test_empty_response_body_returns_empty(self):
+        """Response is completely empty JSON object — no 'web' key at all."""
+        with patch("httpx.get", return_value=make_response({})):
+            results = search_brave("query", 5, None, None, "key123")
+        assert results == []
+
+    def test_no_language_no_country_excludes_those_params(self):
+        """When language and country are None, params must not contain search_lang or country."""
+        with patch("httpx.get", return_value=make_response({"web": {"results": []}})) as mock_get:
+            search_brave("query", 5, None, None, "key123")
+        params = mock_get.call_args[1]["params"]
+        assert "search_lang" not in params
+        assert "country" not in params
+        # Only q and count should be present
+        assert set(params.keys()) == {"q", "count"}

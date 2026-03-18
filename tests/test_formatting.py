@@ -74,6 +74,17 @@ class TestFormatResults:
         lines = output.split("\n")
         assert lines[1] == "   https://example.com"
 
+    def test_snippet_with_blank_lines(self):
+        snippet = "First paragraph.\n\nSecond paragraph."
+        results = [{"title": "Title", "url": "https://example.com", "snippet": snippet}]
+        output = format_results("test", results)
+        assert "   First paragraph." in output
+        assert "   Second paragraph." in output
+        # Blank line in snippet becomes an indented empty line
+        lines = output.split("\n")
+        snippet_lines = [l for l in lines if l.startswith("   ") and l != "   https://example.com"]
+        assert len(snippet_lines) == 3  # "First paragraph.", "", "Second paragraph."
+
     def test_output_does_not_end_with_blank_line(self):
         results = [
             {"title": "A", "url": "https://a.com", "snippet": "Snippet A."},

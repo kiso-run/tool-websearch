@@ -191,3 +191,8 @@ missing `web` key entirely, `web` without `results` key.
 2. Config with unknown backend key — verify `main()` catches it
 
 - [x] Implement config error tests
+
+## History (from core plugins.md)
+
+### Compliance cleanup ✅
+- [x] Added empty deps.sh
